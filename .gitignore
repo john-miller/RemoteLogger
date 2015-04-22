@@ -43,3 +43,11 @@ Temporary Items
 .apdisk
 /bin/
 /target/
+data/elasticsearch/nodes/0/node.lock
+*.springBeans
+.settings/org.eclipse.m2e.core.prefs
+*.prefs
+.classpath
+*.project
+data/elasticsearch/nodes/0/_state/global-1
+*.java
