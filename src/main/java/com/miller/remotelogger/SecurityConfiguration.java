@@ -29,7 +29,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		/* Some custom code here because the default schema does not work with PostgreSQL */
         auth.jdbcAuthentication().dataSource(dataSource)
        		.usersByUsernameQuery("select username, password, account_enabled from users where username=?")
-       		.authoritiesByUsernameQuery("SELECT username, authority FROM users_user_roles JOIN users on users_id = users.id JOIN role ON user_roles_id = role.id where username=?")
+       		.authoritiesByUsernameQuery(
+       				"SELECT username, authority FROM users_user_roles "
+       				+ "JOIN users on users_id = users.id "
+       				+ "JOIN role ON user_roles_id = role.id where username=?")
        		.passwordEncoder(new BCryptPasswordEncoder());
         auth.userDetailsService(userDetailsService);
 	}

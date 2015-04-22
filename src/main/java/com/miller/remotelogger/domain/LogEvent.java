@@ -2,7 +2,10 @@ package com.miller.remotelogger.domain;
 
 import java.util.Map;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import com.fasterxml.jackson.annotation.JsonView;
+import com.miller.remotelogger.views.Views;
 
 /**
  * Log event object that will hold the:
@@ -11,19 +14,17 @@ import com.fasterxml.jackson.annotation.JsonView;
  * for insertion into the database
  * @author Jonathan Miller
  */
-public class LogEvent {
-	
-	public interface ResponseView {};
-	
+public class LogEvent extends ResourceSupport {
+		
 	private int logId;
 	
-	@JsonView(ResponseView.class)
+	@JsonView(Views.ResponseView.class)
 	private String databaseName;
 	
-	@JsonView(ResponseView.class)
+	@JsonView(Views.ResponseView.class)
 	private String tableName;
 	
-	@JsonView(ResponseView.class)
+	@JsonView(Views.ResponseView.class)
 	private Map<String, ?> values;
 	
 	/* Default value is the local host */

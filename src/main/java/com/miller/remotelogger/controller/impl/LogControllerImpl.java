@@ -1,7 +1,8 @@
 package com.miller.remotelogger.controller.impl;
-
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.VndErrors;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,24 +22,26 @@ public class LogControllerImpl implements LogController {
 	private LogService logService;
 	
 	@Override
-	public LogEvent getLogEventById(int logId) throws LogEventNotFoundException
+	public HttpEntity<LogEvent> getLogEventById(int logId) throws LogEventNotFoundException
 	{
-		return logService.retrieveLogEvent(logId);
+		LogEvent logEvent = logService.retrieveLogEvent(logId);
+		logEvent.add(linkTo(methodOn(LogController.class).getLogEventById(logId)).withSelfRel());
+		return new ResponseEntity<LogEvent>(logEvent, HttpStatus.OK);
 	}
 	
 	@Override
-	public LogEvent deleteLogEventById(int logId) throws LogEventNotFoundException
-	{
-		LogEvent logEvent = getLogEventById(logId);
-		logService.deleteLogEvent(logId);
-		return logEvent;
+	public HttpEntity<LogEvent> deleteLogEventById(int logId) throws LogEventNotFoundException
+	{		
+		LogEvent logEvent = new LogEvent();
+		logEvent.add(linkTo(methodOn(LogController.class).getLogEventById(logId)).withSelfRel());
+		return new ResponseEntity<LogEvent>(logEvent, HttpStatus.OK);
 	}
 	
 	@Override
-	public LogEvent addLogEvent(LogEvent logEvent) throws TableNotFoundException, LogEventNotFoundException
+	public HttpEntity<LogEvent> addLogEvent(LogEvent logEvent) throws TableNotFoundException, LogEventNotFoundException
     {
 		logService.addLogEventToQueue(logEvent);
-		return logEvent;
+		return new ResponseEntity<LogEvent>(logEvent, HttpStatus.OK);
     }
 	
 	/**
